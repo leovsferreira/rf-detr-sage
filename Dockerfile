@@ -24,9 +24,11 @@ RUN ln -sf /usr/bin/python3.9 /usr/bin/python
 
 RUN python3.9 -m pip install --upgrade pip
 
-RUN pip3 install -r requirements.txt
-
 WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip3 install -r requirements.txt
 
 RUN mkdir -p /app/models
 
