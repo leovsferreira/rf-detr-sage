@@ -40,23 +40,9 @@ WORKDIR /app
 
 RUN mkdir -p /app/models
 
-RUN python3.9 -c "
-from rfdetr import RFDETRBase
-import numpy as np
+RUN echo 'from rfdetr import RFDETRBase; import numpy as np; print("Downloading RF-DETR model..."); model = RFDETRBase(); dummy_image = np.zeros((480, 640, 3), dtype=np.uint8); model.predict(dummy_image, threshold=0.5); print("Model download completed")' > /tmp/download_model.py
 
-print('Downloading RF-DETR Base model...')
-model = RFDETRBase()
-
-# Trigger a dummy prediction to ensure all weights are loaded
-dummy_image = np.zeros((480, 640, 3), dtype=np.uint8)
-try:
-    _ = model.predict(dummy_image, threshold=0.5)
-    print('Model weights downloaded and verified successfully')
-except Exception as e:
-    print(f'Dummy prediction failed but model should be cached: {e}')
-
-print('RF-DETR model setup completed')
-"
+RUN python3.9 /tmp/download_model.py && rm /tmp/download_model.py
 
 ENV DEBIAN_FRONTEND=dialog
 
