@@ -26,15 +26,8 @@ RUN python3.9 -m pip install --upgrade pip
 
 RUN pip3 install opencv-python==4.8.0.74 numpy
 RUN pip3 install pywaggle[all]==0.56.0
-
-RUN pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-
-RUN pip3 install --no-deps rfdetr
-
-RUN pip3 install cython pycocotools scipy timm tqdm accelerate transformers \
-    peft ninja einops pandas pylabel onnx onnxsim onnx_graphsurgeon \
-    polygraphy open_clip_torch rf100vl pydantic supervision matplotlib \
-    Pillow requests huggingface-hub safetensors packaging pyyaml
+RUN pip3 pip install rfdetr
+RUN pip3 install boto3 botocore
 
 WORKDIR /app
 
