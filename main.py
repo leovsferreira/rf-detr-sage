@@ -62,7 +62,7 @@ def main():
         plugin = Plugin()
         model = load_model_offline()
 
-        with Camera() as camera:
+        with Camera("bottom_camera") as camera:
             snapshot = camera.snapshot()
         
         timestamp = snapshot.timestamp
