@@ -24,10 +24,7 @@ RUN ln -sf /usr/bin/python3.9 /usr/bin/python
 
 RUN python3.9 -m pip install --upgrade pip
 
-RUN pip3 install opencv-python==4.8.0.74 numpy
-RUN pip3 install pywaggle[all]==0.56.0
-RUN pip3 install rfdetr
-RUN pip3 install boto3 botocore
+RUN pip3 install -r requirements.txt
 
 WORKDIR /app
 
