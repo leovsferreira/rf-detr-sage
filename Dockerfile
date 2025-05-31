@@ -26,6 +26,12 @@ RUN ln -sf /usr/bin/python3.9 /usr/bin/python
 
 RUN python3.9 -m pip install --upgrade pip
 
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.27.9/cmake-3.27.9-linux-aarch64.tar.gz && \
+    tar -zxvf cmake-3.27.9-linux-aarch64.tar.gz && \
+    mv cmake-3.27.9-linux-aarch64 /opt/cmake && \
+    ln -s /opt/cmake/bin/cmake /usr/bin/cmake && \
+    cmake --version
+
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
