@@ -24,14 +24,14 @@ def load_model_offline():
         if os.path.exists(backup_path):
             try:
                 print(f"Loading model from backup: {backup_path}", flush=True)
-                model = RFDETRBase()
                 
-                checkpoint = torch.load(backup_path, map_location='cpu')
-                model.model.load_state_dict(checkpoint['model_state_dict'])
-                print("Model loaded successfully from backup", flush=True)
+                model = torch.load(backup_path, map_location='cpu')
+                print("Model loaded successfully from backup (full model)", flush=True)
                 return model
+                
             except Exception as backup_e:
                 print(f"Failed to load from backup: {backup_e}", flush=True)
+                raise backup_e
         
         raise e
 
