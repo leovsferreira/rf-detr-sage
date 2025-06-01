@@ -26,12 +26,6 @@ RUN ln -sf /usr/bin/python3.10 /usr/bin/python && \
 
 RUN python --version && pip --version && cmake --version
 
-RUN wget https://github.com/Kitware/CMake/releases/download/v3.27.9/cmake-3.27.9-linux-aarch64.tar.gz && \
-    tar -zxvf cmake-3.27.9-linux-aarch64.tar.gz && \
-    mv cmake-3.27.9-linux-aarch64 /opt/cmake && \
-    ln -sf /opt/cmake/bin/cmake /usr/bin/cmake && \
-    cmake --version
-
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
