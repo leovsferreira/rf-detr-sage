@@ -58,7 +58,6 @@ def detect_objects(image, model):
 def main():
     with Plugin() as plugin:
         try:
-            plugin = Plugin()
             model = load_model_offline()
 
             with Camera("bottom_camera") as camera:
@@ -75,7 +74,7 @@ def main():
                 image_rgb = snapshot.data
             
             detections = detect_objects(image_rgb, model)
-            print(detections)
+
             class_counts = {}
             for det in detections:
                 class_name = det["class"]
@@ -87,6 +86,7 @@ def main():
                 "total_objects": len(detections)
             }
 
+            print(json.dumps(detection_data))
             plugin.publish("object.detections", json.dumps(detection_data), timestamp=timestamp)
             
         except Exception as e:
