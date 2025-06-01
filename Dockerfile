@@ -38,7 +38,7 @@ RUN pip install -r requirements.txt
 WORKDIR /app
 RUN mkdir -p /app/models
 
-RUN python -c "from rfdetr import RFDETRBase; import torch; model = RFDETRBase(); torch.save({'model_state_dict': model.model.state_dict()}, '/app/models/rfdetr_backup.pt'); print('RF-DETR model downloaded and cached')"
+RUN python -c "from rfdetr import RFDETRBase; import torch; model = RFDETRBase(); torch.save(model, '/app/models/rfdetr_backup.pt'); print('RF-DETR model downloaded and cached')"
 
 COPY . .
 
