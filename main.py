@@ -76,7 +76,7 @@ def main():
             image_rgb = snapshot.data
         
         detections = detect_objects(image_rgb, model)
-        
+        print(detections)
         class_counts = {}
         for det in detections:
             class_name = det["class"]
