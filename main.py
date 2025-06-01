@@ -56,59 +56,60 @@ def detect_objects(image, model):
     return detection_list
 
 def main():
-    plugin = None
-    try:
-        plugin = Plugin()
-        model = load_model_offline()
+    with Plugin() as plugin:
+        try:
+            plugin = Plugin()
+            model = load_model_offline()
 
-        with Camera("bottom_camera") as camera:
-            snapshot = camera.snapshot()
+            with Camera("bottom_camera") as camera:
+                snapshot = camera.snapshot()
+            
+            timestamp = snapshot.timestamp
         
-        timestamp = snapshot.timestamp
-    
-        if isinstance(snapshot.data, np.ndarray):
-            if len(snapshot.data.shape) == 3 and snapshot.data.shape[2] == 3:
-                image_rgb = snapshot.data[:, :, ::-1]
+            if isinstance(snapshot.data, np.ndarray):
+                if len(snapshot.data.shape) == 3 and snapshot.data.shape[2] == 3:
+                    image_rgb = snapshot.data[:, :, ::-1]
+                else:
+                    image_rgb = snapshot.data
             else:
                 image_rgb = snapshot.data
-        else:
-            image_rgb = snapshot.data
-        
-        detections = detect_objects(image_rgb, model)
-        print(detections)
-        class_counts = {}
-        for det in detections:
-            class_name = det["class"]
-            class_counts[class_name] = class_counts.get(class_name, 0) + 1
-        
-        detection_data = {
-            "detections": detections,
-            "counts": class_counts,
-            "total_objects": len(detections)
-        }
+            
+            detections = detect_objects(image_rgb, model)
+            print(detections)
+            class_counts = {}
+            for det in detections:
+                class_name = det["class"]
+                class_counts[class_name] = class_counts.get(class_name, 0) + 1
+            
+            detection_data = {
+                "detections": detections,
+                "counts": class_counts,
+                "total_objects": len(detections)
+            }
 
-        plugin.publish("object.detections", json.dumps(detection_data), timestamp=timestamp)
-        
-    except Exception as e:
-        try:
-            error_timestamp = timestamp
-        except NameError:
-            import time
-            error_timestamp = time.time_ns()
+            plugin.publish("object.detections", json.dumps(detection_data), timestamp=timestamp)
+            
+        except Exception as e:
+            try:
+                error_timestamp = timestamp
+            except NameError:
+                import time
+                error_timestamp = time.time_ns()
 
-        error_data = {
-            "status": "error",
-            "error_type": type(e).__name__,
-            "error_message": str(e),
-            "traceback": traceback.format_exc()
-        }
+            error_data = {
+                "status": "error",
+                "error_type": type(e).__name__,
+                "error_message": str(e),
+                "traceback": traceback.format_exc()
+            }
 
-        plugin.publish("plugin.error", json.dumps(error_data), timestamp=error_timestamp)
+            plugin.publish("plugin.error", json.dumps(error_data), timestamp=error_timestamp)
 
-        print(f"Error in plugin: {e}", file=sys.stderr)
-        traceback.print_exc()
+            print(f"Error in plugin: {e}", file=sys.stderr)
+            traceback.print_exc()
 
-        raise
+            raise
 
 if __name__ == "__main__":
     main()
+
