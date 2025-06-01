@@ -87,15 +87,8 @@ def main():
             "total_objects": len(detections)
         }
 
-        print(f"Publishing detection data: {len(detections)} objects detected", flush=True)
-        print(f"Class counts: {class_counts}", flush=True)
-        
         plugin.publish("object.detections", json.dumps(detection_data), timestamp=timestamp)
-        print("Data published successfully!", flush=True)
         
-        plugin.publish("test.message", "RF-DETR plugin is running", timestamp=timestamp)
-        print("Test message published", flush=True)
-
     except Exception as e:
         try:
             error_timestamp = timestamp
