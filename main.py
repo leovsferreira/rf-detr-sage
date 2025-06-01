@@ -24,15 +24,13 @@ def load_model_offline():
         if os.path.exists(backup_path):
             try:
                 print(f"Loading model from backup: {backup_path}", flush=True)
-                
                 model = torch.load(backup_path, map_location='cpu')
                 print("Model loaded successfully from backup (full model)", flush=True)
                 return model
-                
             except Exception as backup_e:
                 print(f"Failed to load from backup: {backup_e}", flush=True)
                 raise backup_e
-        
+
         raise e
 
 def detect_objects(image, model):
@@ -64,7 +62,7 @@ def main():
                 snapshot = camera.snapshot()
             
             timestamp = snapshot.timestamp
-        
+
             if isinstance(snapshot.data, np.ndarray):
                 if len(snapshot.data.shape) == 3 and snapshot.data.shape[2] == 3:
                     image_rgb = snapshot.data[:, :, ::-1]
@@ -88,7 +86,7 @@ def main():
 
             print(json.dumps(detection_data))
             plugin.publish("object.detections", json.dumps(detection_data), timestamp=timestamp)
-            
+
         except Exception as e:
             try:
                 error_timestamp = timestamp
@@ -110,6 +108,7 @@ def main():
 
             raise
 
+    os._exit(0)
+
 if __name__ == "__main__":
     main()
-
