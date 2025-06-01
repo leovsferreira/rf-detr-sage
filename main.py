@@ -49,7 +49,6 @@ def detect_objects(image, model):
         
         detection_list.append({
             "class": COCO_CLASSES[class_id],
-            "class_id": int(class_id),
             "confidence": float(confidence),
             "bbox": [float(bbox[0]), float(bbox[1]), float(bbox[2]), float(bbox[3])]
         })
@@ -87,9 +86,16 @@ def main():
             "counts": class_counts,
             "total_objects": len(detections)
         }
+
+        print(f"Publishing detection data: {len(detections)} objects detected", flush=True)
+        print(f"Class counts: {class_counts}", flush=True)
         
         plugin.publish("object.detections", json.dumps(detection_data), timestamp=timestamp)
+        print("Data published successfully!", flush=True)
         
+        plugin.publish("test.message", "RF-DETR plugin is running", timestamp=timestamp)
+        print("Test message published", flush=True)
+
     except Exception as e:
         try:
             error_timestamp = timestamp
