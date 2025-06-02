@@ -1,5 +1,5 @@
 name: rf-detr-sage
-version: 0.1.0
+version: 0.2.0
 description: uses rf-detr to identify objects in the image
 keywords: ""
 authors: Leonardo Ferreira
